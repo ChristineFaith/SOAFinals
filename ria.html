@@ -1,0 +1,181 @@
+<html>
+	<head>
+		<script src="./jquery.js"
+				type="text/javascript">
+		</script>
+	</head>
+	
+	<body>
+		<h1>RIA APPLICATION</h1>
+		<div id="content">
+		</div>
+		<button id = "basic">Get Basic Information </button>
+		<button id = "pictures">Get Pictures </button>
+		<button id = "social">Social Aspects </button>
+	</body>
+	
+	<script> 
+		var domain = "https://graph.facebook.com";
+		var profile_id = "100000015710262";
+		var service = "/" + profile_id;
+		var access_token = "AAACEdEose0cBAGbzayZAqwKIQc6pk1kRKtMZCqdeq3dZCVaQyLRmWiw3JFa417Q8Ppxdc0RdrWBzRcy0vnA6TfRzzDuh8Y4g2yaejVwjtusIgII5f9k"; 
+		var basic_url = domain + service + "?fields=name,gender,age_range,location,email,languages,birthday,religion,interests&access_token=" + access_token;
+		
+		var pictures_url = domain + service + "?fields=photos.limit(5),cover&access_token="+ access_token; 
+		
+		var social_url = domain + service + "?fields=events.limit(1),likes,friends,relationship_status&access_token=" + access_token; 
+		
+		$("#social").click(function() {
+			$.getJSON(social_url, function(data){
+				var event = data["events"]["data"]; 
+				$(event).each(function(i){
+					var e = event[i]["name"]; 
+					if (!e) {
+						e = "n/a"; 
+					}
+					$("#content").append("<br> LATEST EVENT:  " + e + "</br>");
+				}); 
+				
+				var likeArray = data["likes"]["data"]; 
+				$("#content").append("LIKES: "); 
+				if (!likeArray) {
+					likeArray = "n/a"; 
+				}
+				 $(likeArray).each(function(i){
+					$("#content").append("<br>" + likeArray[i]["name"] + "</br>"); 
+				});
+				
+				var nameArray = data["friends"]["data"]; 
+				if (!nameArray) {
+					nameArray = "n/a"; 
+				}
+				$("#content").append("FRIENDS: "); 
+				 $(nameArray).each(function(i){
+					$("#content").append("<br>" + nameArray[i]["name"] + "</br>"); 
+				});
+				
+				
+				var rel = data["relationship_status"]; 
+				if (!rel) {
+					rel = "n/a"; 
+				}
+				$("#content").append("<br> RELATIONSHIP STATUS: " + rel + "</br>"); 
+			}); 
+		});
+		
+		$("#pictures").click(function() {
+			$.getJSON(pictures_url, function(data) {
+				var recent = data ["photos"]["data"];
+				if (!recent) {
+					recent = "n/a"; 
+				}
+				var cov = data ["cover"]["source"]; 
+				if (!cov) {
+					cov = "n/a"; 
+				}
+				$(recent).each(function(i){
+					var p = "<img src=" + recent[i]["source"] + ">";
+					var f = recent[i]["from"]["name"]; 
+					$("#content").append("<br>" + p + "</br>");
+					$("#content").append("<br> FRIEND: " + f + "</br>");
+				}); 
+				
+				$("#content").append("<br> COVER PHOTO: </br>");
+				var ccc = "<img src=" + cov + ">";
+				if ( !ccc) {
+					ccc = "n/a"; 
+				}
+				$("#content").append("<br>" + ccc + "</br>");
+			}); 
+		});
+		
+		$("#basic").click(function(){
+			$.getJSON(basic_url, function(data){
+				var name = data["name"]; 
+				var gender = data["gender"]; 
+				var age = data ["age_range"]; 
+				var location = data ["location"]["name"]; 
+				var email = data["email"]; 
+				var array = data["languages"]; 
+				var birthday = data["birthday"]; 
+				var year = birthday.substring(6); 
+				var currentTime = new Date()
+				var currYear = currentTime.getFullYear(); 
+				var age = currYear - year; 
+				var interests = data ["interests"]["data"]; 
+				var religion = data["religion"]; 
+				
+				//name 
+				if (!name) {
+					name = "n/a"; 
+				}
+				$("#content").append("<br> NAME: " + name + "</br>");
+				
+				//gender
+				if (!gender) {
+					gender = "n/a"; 
+				}
+				
+				if (!age){
+					age = "n/a"; 
+				}
+				
+				if (!location){
+					location = "n/a"; 
+				}
+				
+				if (!email){
+					email = "n/a"; 
+				}
+				
+				if (!array){
+					array = "n/a"; 
+				}
+				
+				if (!birthday){
+					birthday = "n/a"; 
+				}
+				
+				if (!interests){
+					interests = "n/a"; 
+				}
+				
+				if (!religion){
+					religion = "n/a"; 
+				}
+				$("#content").append("<br> GENDER: " + gender + "</br>");
+				
+				//age
+				$("#content").append("<br> AGE: " + age + "</br>");
+				
+				//location
+				$("#content").append("<br> LOCATION: " + location + "</br>");
+				
+				//email 
+				$("#content").append("<br> PHONE NUMBER: Disabled feature by Facebook Graphed </br>"); 
+				
+				//email 
+				$("#content").append("<br> EMAIL: " + email + "</br>");
+				
+				//languages 
+				$("#content").append("<br> LANGUAGES: </br>");
+				$(array).each(function(i){
+					//alert ("hello"); 
+					$("#content").append("<br>" + array[i]["name"] + "</br>");
+				}); 
+				
+				//birthday 
+				$("#content").append("<br> BIRTHDAY: " + birthday + "</br>");
+				
+				//interests
+				$("#content").append("<br> INTERESTS: </br>");
+				$(interests).each(function(i){
+					$("#content").append("<br>" + interests[i]["name"] + "</br>");
+				}); 
+				
+				//religion
+				$("#content").append("<br> RELIGION:" + religion + "</br>");
+			}); 
+		}); 
+	</script>
+</html>
