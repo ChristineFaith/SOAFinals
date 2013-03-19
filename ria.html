@@ -37,28 +37,37 @@
 				}); 
 				
 				var likeArray = data["likes"]["data"]; 
-				$("#content").append("LIKES: "); 
 				if (!likeArray) {
 					likeArray = "n/a"; 
+					$("#content").append("<br> LIKES:  " + likeArray + "</br>");
 				}
-				 $(likeArray).each(function(i){
-					$("#content").append("<br>" + likeArray[i]["name"] + "</br>"); 
-				});
+				
+				else {
+					$("#content").append("LIKES: "); 
+					 $(likeArray).each(function(i){
+						$("#content").append("<br>" + likeArray[i]["name"] + "</br>"); 
+					});
+				}
 				
 				var nameArray = data["friends"]["data"]; 
 				if (!nameArray) {
 					nameArray = "n/a"; 
+					$("#content").append("<br> FRIENDS:  " + nameArray + "</br>");
 				}
-				$("#content").append("FRIENDS: "); 
-				 $(nameArray).each(function(i){
-					$("#content").append("<br>" + nameArray[i]["name"] + "</br>"); 
-				});
+				
+				else {
+					$("#content").append("FRIENDS: "); 
+					 $(nameArray).each(function(i){
+						$("#content").append("<br>" + nameArray[i]["name"] + "</br>"); 
+					});
+				}
 				
 				
 				var rel = data["relationship_status"]; 
 				if (!rel) {
 					rel = "n/a"; 
 				}
+				
 				$("#content").append("<br> RELATIONSHIP STATUS: " + rel + "</br>"); 
 			}); 
 		});
@@ -68,24 +77,28 @@
 				var recent = data ["photos"]["data"];
 				if (!recent) {
 					recent = "n/a"; 
+					$("#content").append("<br> PHOTOS: " + recent + "</br>");
 				}
+				else {
+				
+					$(recent).each(function(i){
+						var p = "<img src=" + recent[i]["source"] + ">";
+						var f = recent[i]["from"]["name"]; 
+						$("#content").append("<br>" + p + "</br>");
+						$("#content").append("<br> FRIEND: " + f + "</br>");
+					}); 
+				}
+				
 				var cov = data ["cover"]["source"]; 
 				if (!cov) {
 					cov = "n/a"; 
+					$("#content").append("<br> PHOTOS: " + cov + "</br>");
 				}
-				$(recent).each(function(i){
-					var p = "<img src=" + recent[i]["source"] + ">";
-					var f = recent[i]["from"]["name"]; 
-					$("#content").append("<br>" + p + "</br>");
-					$("#content").append("<br> FRIEND: " + f + "</br>");
-				}); 
-				
-				$("#content").append("<br> COVER PHOTO: </br>");
-				var ccc = "<img src=" + cov + ">";
-				if ( !ccc) {
-					ccc = "n/a"; 
+				else {
+					$("#content").append("<br> COVER PHOTO: </br>");
+					var ccc = "<img src=" + cov + ">";
+					$("#content").append("<br>" + ccc + "</br>"); 
 				}
-				$("#content").append("<br>" + ccc + "</br>");
 			}); 
 		});
 		
@@ -129,7 +142,16 @@
 				}
 				
 				if (!array){
-					array = "n/a"; 
+					array = "n/a";
+					$("#content").append("<br> LANGUAGE: " + array + "</br>");					
+				}
+				
+				else {
+					$("#content").append("<br> LANGUAGES: </br>");
+					$(array).each(function(i){
+					//alert ("hello"); 
+					$("#content").append("<br>" + array[i]["name"] + "</br>");
+				}); 
 				}
 				
 				if (!birthday){
@@ -138,6 +160,15 @@
 				
 				if (!interests){
 					interests = "n/a"; 
+					$("#content").append("<br> INTERESTS: " + interests + "</br>");
+				}
+				
+				else {
+					//interests
+				$("#content").append("<br> INTERESTS: </br>");
+				$(interests).each(function(i){
+					$("#content").append("<br>" + interests[i]["name"] + "</br>");
+				}); 
 				}
 				
 				if (!religion){
@@ -158,20 +189,12 @@
 				$("#content").append("<br> EMAIL: " + email + "</br>");
 				
 				//languages 
-				$("#content").append("<br> LANGUAGES: </br>");
-				$(array).each(function(i){
-					//alert ("hello"); 
-					$("#content").append("<br>" + array[i]["name"] + "</br>");
-				}); 
+				
 				
 				//birthday 
 				$("#content").append("<br> BIRTHDAY: " + birthday + "</br>");
 				
-				//interests
-				$("#content").append("<br> INTERESTS: </br>");
-				$(interests).each(function(i){
-					$("#content").append("<br>" + interests[i]["name"] + "</br>");
-				}); 
+				
 				
 				//religion
 				$("#content").append("<br> RELIGION:" + religion + "</br>");
